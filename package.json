@@ -1,19 +1,19 @@
 {
   "name": "infernite",
   "version": "0.0.1",
-  "description": "Javascript client for infernite.",
+  "description": "Javascript client for Infernite.",
   "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Licini/Infernite.git"
+    "url": "git+https://github.com/generative-technology/Infernite.git"
   },
-  "author": "Li",
+  "author": "Generative Technology Limited",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Licini/Infernite/issues"
+    "url": "https://github.com/generative-technology/Infernite/issues"
   },
-  "homepage": "https://github.com/Licini/Infernite#readme",
+  "homepage": "https://github.com/generative-technology/Infernite#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "form-data": "^3.0.0",
