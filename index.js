@@ -1,70 +1,52 @@
 const axios = require("axios");
 const FormData = require('form-data');
 const fs = require('fs');
-
+const request = require('request');
+const validUrl = require('valid-url');
 
 class infernite {
 
-    constructor(username, token) {
-        this.username = username
+    constructor(token) {
         this.token = token
-        this.client = axios.create({
-            baseURL: "http://207.53.234.153"
-        })
-
+        this.api = 'https://infernite.ai/predictions'
     }
 
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async check_login() {
-
-        if (this.login_response) {
-            // while the session has already logged in
-            return this.login_response
-
-        } else if (this.waiting_to_login) {
-            // while a login request has been sent but not yet responded
-            while (!this.login_response)
-                await this.sleep(50)
-            return this.login_response
-
-        } else {
-            // initiat a login request
-            this.waiting_to_login = true
-            await this.login()
-            this.waiting_to_login = false
-            return this.login_response
-
-        }
-
-    }
-
-    async login() {
-        this.login_response = await this.client.post('/user/login', { username: this.username, password: this.password })
-        console.log(this.login_response.data)
-        return this.login_response
-    }
-
-    async run(model_name, file_path) {
-
-        await this.check_login()
+    async predict(body) {
 
         const form = new FormData();
-        form.append("model", model_name);
-        form.append('file', fs.createReadStream(file_path));
+
+        if (!body.model) throw new Error("model field is required")
+
+        if (body.image) {
+            if (validUrl.isUri(body.image)) {
+                form.append('image', request(body.image));
+            } else {
+                form.append('image', fs.createReadStream(body.image));
+            }
+            delete body.image
+        }
+        
+        for (let key in body) {
+            form.append(key, body[key].toString());
+        }
+
 
         const request_config = {
             headers: {
                 ...form.getHeaders(),
-                Cookie: this.login_response.headers['set-cookie'][0]
+                Token: this.token
             },
         };
 
-        let response = await this.client.post('/models/inference', form, request_config)
-
-        return response
+        try {
+            let respoonse = await axios.post(this.api, form, request_config)
+            return respoonse
+        } catch (err) {
+            if (err.response && err.response.data){
+                throw new Error(`Status code ${err.response.status}: ${JSON.stringify(err.response.data)}`)
+            }
+            else throw new Error(err.message)
+        }
 
     }
 

@@ -1,11 +1,9 @@
 {
   "name": "infernite",
   "version": "0.0.1",
-  "description": "This repo is the Javascript client for [Infernite](). For python client, please go to [Infernite-python]()",
+  "description": "Javascript client for infernite.",
   "main": "index.js",
-  "scripts": {
-    "test": "node test.js"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Licini/Infernite.git"
@@ -18,6 +16,8 @@
   "homepage": "https://github.com/Licini/Infernite#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "form-data": "^3.0.0"
+    "form-data": "^3.0.0",
+    "request": "^2.88.2",
+    "valid-url": "^1.0.9"
   }
 }
